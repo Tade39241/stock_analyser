@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} Companies - Company Sentiment Analyser {% endblock %}
+{% block content %}
+    </section>
+            <h2 style="font-family: Lobster; font-size: 30px; color: white;">Search Results</h2>
+            <ul>
+                {% for company in search_results %}
+                    <li class>
+                        <a href="/company_dashboard/{{ company[1] }}">{{ company[0] }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+{% endblock %}

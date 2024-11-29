@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %} Companies - Company Sentiment Analyser {% endblock %}
+{% block content %}
+<main>
+    <h2>Fetch Data for a Company</h2>
+    <form action="/companies" method="POST">
+        <label for="ticker">Enter Ticker Symbol:</label>
+        <input type="text" id="ticker" name="ticker" required>
+        <button type="submit">Fetch Data</button>
+    </form>
+
+    {% if company_data %}
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Open</th>
+                <th>High</th>
+                <th>Low</th>
+                <th>Close</th>
+                <th>Volume</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in company_data %}
+            <tr>
+                <td>{{ record['Date'] }}</td>
+                <td>{{ record['Open'] }}</td>
+                <td>{{ record['High'] }}</td>
+                <td>{{ record['Low'] }}</td>
+                <td>{{ record['Close'] }}</td>
+                <td>{{ record['Volume'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+        
+</main>
+{% endblock %}
+

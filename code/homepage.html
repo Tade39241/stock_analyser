@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %} Home Page {% endblock %}
+{% block content %}
+<h2 style="font-family: Lobster; font-size: 30px; color: white;">Welcome, {{username}}!</h2>
+<section class="followed-section">
+    <h2 style="font-family: Lobster; font-size: 30px; color: white;">Following Companies</h2>
+    <div class="companies-grid">
+        {% if followed_companies %}
+            {% for company in followed_companies %}
+            <div class="company-card">
+                <a href="/company_dashboard/{{ company.compticker }}">
+                    <div>
+                        <h3 style="color: white">{{company.compname}}</h3>
+                        <p style="color: white">Stock price: £{{company.stockprice}}</p>
+                        <p>
+                            <div class="{{ 'growth-positive' if company.growth >= 0 else 'growth-negative' }}">Growth (last 7 days): {{company.growth}}%</div>
+                        </p>
+                        <p><div class="{{ 'growth-positive' if company.comprating >= 50 else 'growth-negative' }}">Public Perception rating: {{company.comprating}}</div></p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-message">
+                <a href="/companies">Follow Companies to keep track of them!</a>
+            </div> 
+        {% endif %}
+    </div>
+</section>
+
+<section class="suggested-section">
+    <h2 style="font-family: Lobster; font-size: 30px; color: white;">Suggested Companies</h2>
+    <div class="companies-grid">
+            {% for company in suggested_companies %}
+            <div class="company-card">
+                <a href="/company_dashboard/{{ company['compticker'] }}">
+                <div>
+                    <h3 style="color: white">{{company['compname']}}</h3>
+                    <p style="color: white">Stock price: £{{company['stockprice']}}</p>
+                        <p>
+                            <div class="{{ 'growth-positive' if company['growth'] >= 0 else 'growth-negative' }}">Growth (last 7 days): {{company['growth']}}%</div>
+                        </p>
+                    <p><div class="{{ 'growth-positive' if company['comprating'] >= 50 else 'growth-negative' }}">Public Perception rating: {{company['comprating']}}</div></p>
+                </div>
+                </a>
+            </div>
+            
+            {% endfor %}
+    </div>
+</section>
+<br><br><br>
+<section class="following-categories">
+    <h2 class="category-title" style="font-family: Lobster; font-size: 30px; color: white;">Following Categories</h2>
+    <p style="color: white; text-align:center;">Ranked by: Growth (last 7 days)</p>
+    {% if followed_categories %}
+    <div class="companies-grid">
+        {% for entry in followed_categories %}
+        <div class="category-item">
+            <h4 style="font-family: Lobster; font-size: 20px; color: white; text-align: center;">{{ entry[0] }}</h4>
+            {% for row in entry[1] %}
+            <div class="company-card">
+            <a href="/company_dashboard/{{ row.compticker }}">
+            <h3 style="color: white">{{ row.rownum }}: {{ row.compname }}</h3>
+            <p style="color: white">Stock price: £{{ row.stockprice }}</p>
+            <p><div class="{{ 'growth-positive' if row.growth >= 0 else 'growth-negative' }}">Growth (last 7 days): {{ row.growth }}%</div></p>
+            <p> <div class="{{ 'growth-positive' if row.comprating >= 50 else 'growth-negative' }}">Public Perception rating: {{ row.comprating }}%</div></p>
+            <br>
+            </a>
+            </div>
+            {% endfor %}
+            <a href="/categories/{{ entry[0] }}">View More</a>
+        </div>
+        {% endfor %}
+        {% else %}
+            <div class="empty-message">
+                <a href="/categories">Follow Categories to keep track of them!</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="followed-news">
+    <h2 style="font-family: Lobster; font-size: 30px; color: white;">Following News</h2>
+    <div class="news-container">
+        {% if followed_news %}
+            {% for news in followed_news %}
+                <div class="news-article" style="color:black;">
+                    <a href="{{ news.newslink }}">
+                        <div class="news-info">
+                            <h3 style="color: black;">{{news.newstitle}}</h3>
+                            <p style="color: black;">{{news.newsdate}}</p>
+                            <p style="color: black;">Related Company: {{news.newscomp}}</p>
+                            <p style="color: black;"> <div class="{{ 'growth-positivedark' if news.newssentiment >= 50 else 'growth-negativedark' }}">Sentiment: {{news.newssentiment}}</div></p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-message">
+                <a href="/companies">Follow Companies to keep track of their latest news!</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+</div>
+{% endblock %}

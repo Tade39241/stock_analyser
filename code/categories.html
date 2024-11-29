@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %} Categories - Company Sentiment Analyser {% endblock %}
+{% block content %}
+<main>
+    <h2 style="color:white;"All Categories</h2>
+    <section class="tiles-container"> 
+        <a href="{{ url_for('category', catname='Business') }}" class="tile">
+            <img src="{{ url_for('static', filename='images/finance2.jpeg') }}" alt="Business" loading="lazy">
+            <div class="category-label">Business</div>
+        </a>
+
+        <a href="{{ url_for('category', catname='Health') }}" class="tile">
+            <img src="{{ url_for('static', filename='images/pharma2.jpeg') }}" alt="Health" loading="lazy">
+            <div class="category-label">Health</div>
+        </a>
+
+        <a href="{{ url_for('category', catname='Entertainment') }}" class="tile">
+            <img src="{{ url_for('static', filename='images/media2.jpeg') }}" alt="Entertainment" loading="lazy">
+            <div class="category-label">Entertainment</div>
+        </a>
+
+        <a href="{{ url_for('category', catname='Science') }}" class="tile">
+            <img src="{{ url_for('static', filename='images/biotechnology2.jpeg') }}" alt="Science" loading="lazy">
+            <div class="category-label">Science</div>
+        </a>
+
+        <a href="{{ url_for('category', catname='Sports') }}" class="tile">
+            <img src="{{ url_for('static', filename='images/sports.jpeg') }}" alt="Sports" loading="lazy">
+            <div class="category-label">Sports</div>
+        </a>
+
+
+        <a href="{{ url_for('category', catname='Technology') }}" class="tile">
+            <img src="{{ url_for('static', filename='images/technology2.jpeg') }}" alt="Technology/Software" loading="lazy">
+            <div class="category-label">Technology/Software</div>
+        </a>
+
+    </section> 
+</main>
+{% endblock %}

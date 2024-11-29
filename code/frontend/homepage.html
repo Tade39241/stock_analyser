@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %} Home Page {% endblock %}
+{% block content %}
+<main>
+    <h2>Welcome, {{ username }}!</h2>
+    <!-- Content for company tracking, news updates, etc. -->
+    <section id="company-tracking">
+        <h3>Company Tracking</h3>
+        <!-- Dynamic content pulled from the Flask app -->
+        <ul>
+            {% for company in tracked_companies %}
+            <li>{{ company.name }} - {{ company.stock_price }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+    <section id="latest-news">
+        <h3>Latest News</h3>
+        <!-- News articles populated here -->
+        <ul>
+            {% for article in latest_news %}
+            <li><a href="{{ article.url }}">{{ article.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+</main>
+{% endblock %}

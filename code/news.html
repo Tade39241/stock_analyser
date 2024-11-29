@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} News - Company Sentiment Analyser {% endblock %}
+{% block content %}
+<h2 class="news-heading">Latest News</h2>
+<main class="news-main">
+    <div class="news-container">
+        <!-- Loop through news articles and display each article -->
+        {% for article in articles %}
+        
+        <div class="news-article" style="color:black;">
+            <a href="{{ article.newslink }}" target="_blank" >
+                <h3 style="color: black; font-family: 'Playfair Display', serif; font-size: 25px;">{{ article.newstitle }}</h3>
+                <p style="color: black; font-family: 'Droid Serif', serif;">Published: {{ article.newsdate }}</p>
+                <p style="color: black; font-family: 'Droid Serif', serif;" >Related Company: {{ article.newscomp }}</p>
+                <p style="color: black; font-family: 'Droid Serif', serif;">Related Category: {{ article.newscat }}</p>
+                <p style="color: black;"> <div class="{{ 'growth-positivedark' if article.newssentiment >= 50 else 'growth-negativedark' }}" style="font-family: 'Droid Serif', serif;">Article sentiment: {{article.newssentiment}}</div></p>
+            </a>
+        </div>
+        
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

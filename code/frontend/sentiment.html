@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %} Sentiment Analyser - Company Sentiment Analyser {% endblock %}
+{% block content %}
+<h1>Sentiment Analysis - Company Sentiment Analyser</h1>
+    <h2>Sentiment Analysis Results</h2>
+    {% for sentiment in sentiments %}
+        <p>Sentiment: {{ sentiment }}</p>
+    {% endfor %}
+{% endblock %}

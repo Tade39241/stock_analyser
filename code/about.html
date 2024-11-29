@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %} Categories - Company Sentiment Analyser {% endblock %}
+{% block content %}
+    <main>
+        <section>
+            <h2 style="color: white;">About Company Sentiment Analyser</h2><br>
+            <p>Company Sentiment Analyser is a project designed to track publicly traded companies and analyse their public sentiment.</p>
+            <p>Our goal is to provide users with valuable insights into company performance and market trends, empowering informed decision-making.</p>
+        </section>
+        <section>
+            <h3>What is the sentiment score?</h3>
+            <p>Every news article has a sentiment score ranging from 0 to 100. This score describes how positive or negative the article is. An article would be described as negative if it has a score much less than 50, positive if it has a score much more than 50, and neutral if it has a score around 50. </p>
+            <h3>How are metrics calculated?</h3>
+            <p>Each companies public perception rating is calculated by taking the average sentiment score of all its associated news articles.</p>
+        </section>
+    </main>
+</body>
+</html>
+{% endblock %}

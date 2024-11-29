@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %} Companies - Company Sentiment Analyser {% endblock %}
+{% block content %}
+    <main class="companies-page">
+        <section class="trending-companies">
+            <h2 style="font-family: Lobster; font-size: 30px; color: white;">Trending Companies</h2>
+            <p style="text-align: center;"> Companies with the highest average stock volume over the last 5 business days</p>
+            <div class="companies-grid">
+                {% for company in trending_companies %}
+                <a href="/company_dashboard/{{ company[1] }}">
+                <div class="company-card">
+                   <p style="color:white;">{{ company[0] }}</p>
+                </div>
+                </a>
+                {% endfor %}
+            </div>
+            <br><br><br>
+            <h2 style="font-family: Lobster; font-size: 30px; color: white;">Top Rated Companies</h2>
+            <p style="text-align: center;"> Companies with the highest public perception rating</p>
+            <!-- Loop through popular companies here -->
+            <div class="companies-grid">
+                {% for company in top_rated_companies %}
+                <a href="/company_dashboard/{{ company.compticker }}">
+                <div class="company-card">
+                    <p style="color:white;">{{ company.compname }}</p>
+                </div>
+                </a>
+            {% endfor %}
+            </div>
+       
+        </section>
+    </main>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} User Details - Company Sentiment Analyser {% endblock %}
+{% block content %}
+<main>
+    <section>
+        <h2 style="font-family: Lobster; font-size: 30px; color: white;">User Details</h2>
+        {% for row in userdetails %}
+        <p>Username: {{row.username}}</p>
+        <p>User Email: {{row.useremail}}</p>
+        {% endfor %}
+        <a href="/logout"><button>Logout</button></a>
+        <p style="color:rgb(255, 0, 0);"><a href="/deleteaccount"><button>Delete Account</button></a> WARNING: CANNOT BE UNDONE</p>
+    </section>
+</main>
+{% endblock %}

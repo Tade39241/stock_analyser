@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{% block title %}{{ company_name }} Dashboard{% endblock %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<main>
+    <div class="container">
+        <div class="flex items-center space-x-4">
+            <div class="text-lg font-bold">{{ company_name }} ({{ticker}})
+            {% if logged_in %}
+            <button id="followButton" onclick="toggleFollow()" style="background-color:blueviolet; color:white; float:inline-end; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; transition: background-color 0.3s ease;">{{ 'Unfollow' if is_following else 'Follow' }}</button>
+            {% endif %}    
+            </div>
+            <div style="color:black;">Stock price: £ {{stock_price}}</div>
+            
+        </div>
+        <div class="flex lg:flex-row justify-between">
+                <!-- Tabs for Overview, Chart, Analysis, News, Statistics -->
+                <div class="tabs-container">
+                    <button class="tab-button active" data-target="overview">Overview</button>
+                    <button class="tab-button" data-target="chart">Stock Price Chart</button>
+                    <button class="tab-button" data-target="analysis">Analysis</button>
+                    <button class="tab-button" data-target="news">News</button>
+                    <button class="tab-button" data-target="statistics">Data</button>
+                </div>
+
+                <div id="overview" class="tab-content active">
+                    <h2>Overview</h2>
+                    <table class="overviewTable" style="color:black;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Value</th>
+                                <th>Overall Ranking</th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <th>Public Perception Score</th>
+                            <td class="overviewTable-data"><div class="{{ 'growth-positivedark' if comprating >= 50 else 'growth-negativedark' }}">{{comprating}}</div></td>
+                            <td class="overviewTable-data">{{ranks[1][1]}}</td>
+                        </tr>
+                        <tr>
+                            <th>Daily growth</th>
+                            <td class="overviewTable-data"><div class="{{ 'growth-positivedark' if daily_growth >= 0 else 'growth-negativedark' }}">{{ daily_growth }}%</div></td>
+                            <td class="overviewTable-data">{{ranks[3][1]}}</td>
+                        </tr>
+                        <tr>
+                            <th>Growth (last 7 days)</th>
+                            <td class="overviewTable-data"><div class="{{ 'growth-positivedark' if ranks[2][2] >= 0 else 'growth-negativedark' }}">{{ranks[2][2]}}%</div></td>
+                            <td class="overviewTable-data">{{ranks[2][1]}}</td>
+                        </tr>
+                        <tr>
+                            <th>Average stock volume (last 5 business days)</th>
+                            <td class="overviewTable-data">{{ranks[0][2]}}</td>
+                            <td class="overviewTable-data">{{ranks[0][1]}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="chart" class="tab-content">
+                    <h2>Stock Price Chart (last 30 business days)</h2>
+                    <div id="chart-container">
+                        <canvas id="stockPriceChart"></canvas>
+                    </div>
+                </div>
+                <div id="analysis" class="tab-content">
+                    <h2>Analysis</h2>
+                    {% if publicscorechange %}
+                    <table class="analysisTable" style="color:black;">
+                        <thead>
+                            <tr>
+                                <th>Current Public Perception score</th>
+                                <th>Latest Sentiment (average last 7 days) </th>
+                                <th>Increase/decrease</th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td class="overviewTable-data"><div class="{{ 'growth-positivedark' if comprating >= 50 else 'growth-negativedark' }}">{{comprating}}</div></td>
+                            <td class="overviewTable-data"><div class="{{ 'growth-positivedark' if averagesentiment >=50 else 'growth-negativedark' }}">{{averagesentiment}}</div></td>
+                            <td class="overviewTable-data"><div class="{{ 'growth-positivedark' if publicscorechange >= 0 else 'growth-negativedark' }}">{{publicscorechange}}%</div></td>
+                        </tr>
+                    </table>
+                    {% if publicscorechange > 0 %}
+                    <p style="color:green;">Public perception is trending upwards. This could potentially lead to an increase in stock price.</p>
+                    {% else %}
+                    <p style="color: red;">Public perception is trending downwards. This could potentially lead to a decrease in stock price.</p>
+                    {% endif %}
+                    {% else %}
+                    <p style="color: black; text-align: center;">No analysis available</p>
+                    {% endif %}
+                </div>
+                <div id="news" class="tab-content">
+                    <div class="mt-4">
+                        <h2>Latest News</h2>
+                        <div class="space-y-4">
+                            {% for article in articles %}
+                                <div class="bg-gray-100 p-4 rounded-lg">
+                                    <h3>{{ article.newstitle }}</h3>
+                                    <p>Published: {{ article.newsdate }}</p>
+                                    <p><div class="{{ 'growth-positivedark' if article.newssentiment >= 50 else 'growth-negativedark' }} ">Sentiment: {{ article.newssentiment }}%</div></p>
+                                    <a href="{{ article.newslink }}">Read more</a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div id="statistics" class="tab-content">
+                    <div class="mt-4">
+                    <h2>Latest Stock Data</h2>
+                    <div class="space-y-4">
+                    <table>
+                    <style>
+                        table {
+                            width: 100%;
+                            color: black;
+                        }
+                        th {
+                            width: fit-content;
+                            border: 1px solid black;
+                            background-color: #b9b9b9;
+                            border-radius: 5px;
+                            padding: 10px;
+                            text-align: center;}
+
+                        td {
+                            width: fit-content;
+                            padding: 10px;
+                            text-align: center;
+                            border-radius: 5px;
+                            border: 1px solid;
+                        }
+                    </style>
+                        <thead>
+                            <tr>
+                                <th><p>Date</p></th>
+                                <th><p>Open</p></th>
+                                <th><p>High</p></th>
+                                <th><p>Low</p></th>
+                                <th><p>Close</p></th>
+                                <th><p>Volume</p></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in stock_data %}
+                            <tr>
+                                <td>{{ record.stockday }}</td>
+                                <td>{{ record.stockopen }}</td>
+                                <td>{{ record.stockhigh }}</td>
+                                <td>{{ record.stocklow }}</td>
+                                <td>{{ record.stockclose }}</td>
+                                <td>{{ record.stockvolume }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+                </div>
+        </div>
+    </div>
+
+    {% set json_price_date = price_data_date | tojson | safe %}
+    {% set json_price_close = price_data_close | tojson | safe %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.tab-button');
+            const contents = document.querySelectorAll('.tab-content');
+        
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = document.querySelector('#' + tab.getAttribute('data-target'));
+        
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+        
+                    // Add active class to clicked tab and its content
+                    tab.classList.add('active');
+                    target.classList.add('active');
+        
+                    // Initialize the chart when the Chart tab is clicked
+                    if (tab.getAttribute('data-target') === 'chart') {
+                        initChart();
+                    }
+                });
+            });
+        
+            function initChart() {
+                // Check if the chart canvas already has a chart instance
+                if (window.myStockChart) {
+                    window.myStockChart.destroy(); // Destroy existing chart instance if any
+                }
+        
+                var ctx = document.getElementById('stockPriceChart').getContext('2d');
+                var priceDate = JSON.parse('{{ json_price_date }}');
+                var chartLabels = priceDate ;
+                var priceClose = JSON.parse('{{ json_price_close }}');
+                var chartData = priceClose ;
+        
+                window.myStockChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: chartLabels,
+                        datasets: [{
+                            label: 'Closing Price (£)',
+                            data: chartData,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        function toggleFollow() {
+            const compticker = '{{ ticker }}';  // Dynamically set based on the company being viewed
+            fetch(`/toggle_follow/${compticker}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Additional headers like CSRF tokens if needed
+                },
+                // Include credentials if your Flask app requires authentication
+                credentials: 'include'
+            })
+            .then(response => response.json())
+            .then(data => {
+                const followButton = document.getElementById('followButton');
+                if (data.status === 'followed') {
+                    followButton.textContent = 'Unfollow';
+                } else if (data.status === 'unfollowed') {
+                    followButton.textContent = 'Follow';
+                }
+            })
+            .catch(error => console.error('Error toggling follow status:', error));
+        }
+        
+
+        </script>
+                
+        
+</main>
+    
+{% endblock %}

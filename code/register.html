@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %} Register - Company Sentiment Analyser {% endblock %}
+{% block content %}
+<main class="login-container">
+    <section class ="login-form">
+        <h2 style="font-family: Lobster; font-size: 30px; color: white;">Register</h2>
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        <form action="{{ url_for('register') }}" method="POST">
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username" required><br><br>
+
+            <label for="email">Email</label><br>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="password">Password</label><br>
+            <input type="password" id="password" name="password" required><br><br>
+
+            <label for="confirmpassword">Confirm Password</label><br>
+            <input type="password" id="confirmpassword" name="confirmpassword" required><br><br>
+
+            <input type="submit" value="Register" class="btn btn-primary">
+        </form>
+        <p>Already have an account? <a href="/login">Login here</a></p>
+    </section>
+</main>
+{% endblock %}

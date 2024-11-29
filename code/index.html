@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block title %} Home - Company Sentiment Analyser {% endblock %}
+{% block content %}
+<main>
+    <section>
+        <h2 style="font-family: Lobster; font-size: 30px; color: white;">Welcome to Company Sentiment analyser</h2>
+    </section>
+    <div class="overviewRow">
+        {% for company in companies_overview %}
+        <a href="/company_dashboard/{{ company.compticker }}">
+        <div class="overviewColumn">
+            <p style="font-family: Georgia, serif; font-size: 17px; color: black;">{{ company.complongname }} ({{ company.compticker }})</p>
+            <p style="color:black;">Stock price(£): {{ company.stockprice }}</p> <!--Current stock price-->
+            <p style="color:black;"><div class="{{ 'growth-positivedark' if company.comprating >= 50 else 'growth-negativedark' }}">Public Perception rating: {{ company.comprating }}</div></p>
+            <p style="color: black;"><div class="{{ 'growth-positivedark' if company.growth >= 0 else 'growth-negativedark' }}">Growth (last 7 days): {{ company.growth }}%</div></p> <!--Price return over 5 years-->
+       
+            <!-- <p style="color: red;">-17.63 (30.08%)</p> Price return over 5 years-->
+         
+        </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    <section>
+        <h2 style="text-align: center; color: white; font-family: Lobster; font-size: 30px;">Latest News</h2>
+    </section>
+    <div class="row">  <!-- List of news of any company -->
+        <div class="column">
+            <a href="{{ recent_articles[0]['newslink'] }}">
+            <h2 class="indexNewsTitle">{{recent_articles[0]['newstitle']}}</h2> <!--Link to the actual news article-->
+            </a>
+            <div class="infoRow">
+                <div class="infoColumn">
+                    <p style="color:black;">Related Company: {{recent_articles[0]['newscomp']}}</p> <!--The name of the company involved-->
+                </div>
+                <div class="infoColumn">
+                    <p style="color:black;">Related Category: {{recent_articles[0]['newscat']}}</p> <!--The name of the category involved-->
+                </div>
+                <div class="infoColumn">
+                  
+                    <p style="color: black;"><div class="{{ 'growth-positivedark' if recent_articles[0]['newssentiment'] >= 50 else 'growth-negativedark' }}">Sentiment: {{recent_articles[0]['newssentiment']}}</div></p> <!--Sentiment number-->
+                
+                    <!--<p style="color: red;">10</p> -->
+               
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">  <!-- List of news of any company -->
+        <div class="column">
+            <a href="{{ recent_articles[1]['newslink'] }}">
+            <h2 class="indexNewsTitle">{{recent_articles[1]['newstitle']}}</h2> <!--Link to the actual news article-->
+            </a>
+            <div class="infoRow">
+                <div class="infoColumn">
+                    <p style="color:black;">Related Company: {{recent_articles[1]['newscomp']}}</p> <!--The name of the company involved-->
+                </div>
+                <div class="infoColumn">
+                    <p style="color:black;">Related Category: {{recent_articles[1]['newscat']}}</p> <!--The name of the category involved-->
+                </div>
+                <div class="infoColumn">
+                  
+                    <p style="color: black;"><div class="{{ 'growth-positivedark' if recent_articles[1]['newssentiment'] >= 50 else 'growth-negativedark' }}">Sentiment: {{recent_articles[1]['newssentiment']}}</div></p>  <!--Sentiment number-->
+                
+                    <!--<p style="color: red;">10</p> -->
+               
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">  <!-- List of news of any company -->
+        <div class="column">
+            <a href="{{ recent_articles[2]['newslink'] }}">
+            <h2 class="indexNewsTitle">{{recent_articles[2]['newstitle']}}</h2> <!--Link to the actual news article-->
+            </a>
+            <div class="infoRow">
+                <div class="infoColumn">
+                    <p style="color:black;">Related Company: {{recent_articles[2]['newscomp']}}</p> <!--The name of the company involved-->
+                </div>
+                <div class="infoColumn">
+                    <p style="color:black;">Related Category: {{recent_articles[2]['newscat']}}</p> <!--The name of the category involved-->
+                </div>
+                <div class="infoColumn">
+                  
+                    <p style="color: black;"> <div class="{{ 'growth-positivedark' if recent_articles[2]['newssentiment'] >= 50 else 'growth-negativedark' }}">Sentiment: {{recent_articles[2]['newssentiment']}}</div></p>  <!--Sentiment number-->
+                
+                    <!--<p style="color: red;">10</p> -->
+               
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">  <!-- List of news of any company -->
+        <div class="column">
+            <a href="{{ recent_articles[3]['newslink'] }}">
+            <h2 class="indexNewsTitle">{{recent_articles[3]['newstitle']}}</h2> <!--Link to the actual news article-->
+            </a>
+            <div class="infoRow">
+                <div class="infoColumn">
+                    <p style="color:black;">Related Company: {{recent_articles[3]['newscomp']}}</p> <!--The name of the company involved-->
+                </div>
+                <div class="infoColumn">
+                    <p style="color:black;">Related Category: {{recent_articles[3]['newscat']}}</p> <!--The name of the category involved-->
+                </div>
+                <div class="infoColumn">
+                  
+                    <p style="color: black;"><div class="{{ 'growth-positivedark' if recent_articles[3]['newssentiment'] >= 50 else 'growth-negativedark' }}">Sentiment: {{recent_articles[3]['newssentiment']}}</div></p>  <!--Sentiment number-->
+                
+                    <!--<p style="color: red;">10</p> -->
+               
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">  <!-- List of news of any company -->
+        <div class="column">
+            <a href="{{ recent_articles[4]['newslink'] }}">
+            <h2 class="indexNewsTitle">{{recent_articles[4]['newstitle']}}</h2> <!--Link to the actual news article-->
+            </a>
+            <div class="infoRow">
+                <div class="infoColumn">
+                    <p style="color:black;">Related Company: {{recent_articles[4]['newscomp']}}</p> <!--The name of the company involved-->
+                </div>
+                <div class="infoColumn">
+                    <p style="color:black;">Related Category: {{recent_articles[4]['newscat']}}</p> <!--The name of the category involved-->
+                </div>
+                <div class="infoColumn">
+                  
+                    <p style="color: black;"><div class="{{ 'growth-positivedark' if recent_articles[4]['newssentiment'] >= 50 else 'growth-negativedark' }}">Sentiment: {{recent_articles[4]['newssentiment']}}</div></p>  <!--Sentiment number-->
+                
+                    <!--<p style="color: red;">10</p> -->
+               
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</main>
+{% endblock %}

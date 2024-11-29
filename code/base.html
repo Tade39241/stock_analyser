@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="page-container"> <!-- Wrapper for the entire page content including footer -->
+        <nav class="topnav">
+            <ul>
+                <li><img class="logo" src="{{ url_for('static', filename='logo.png') }}" alt="logo"></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/news">News</a></li>
+                <li><a href="/companies">Companies</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn"><a href="/categories">Categories</a></button>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('category', category='Business') }}">Business</a>
+                        <a href="{{ url_for('category', category='Entertainment') }}">Entertainment</a>
+                        <a href="{{ url_for('category', category='Health') }}">Health</a>
+                        <a href="{{ url_for('category', category='Science') }}">Science</a>
+                        <a href="{{ url_for('category', category='Sports') }}">Sports</a>
+                        <a href="{{ url_for('category', category='Technology') }}">Technology</a>
+                        <a href="{{ url_for('category', category='General') }}">General</a>
+                    </div>
+                </li>
+                <li style="margin-top: 2px;"><a href="/about">About</a></li>
+                <div class ="nav-right">
+                <li>
+                    <form action="/search_company" method="GET">
+                        <input type="text" class="searchbar" name="search" placeholder="Search company name">
+                        <button type="submit" class="button"><img class="searchImage" src="{{ url_for('static', filename='search_icon.png') }}" alt="search"></button>
+                    </form>
+                </li>
+                <li><a href="/login"><img class="login" src="{{ url_for('static', filename='login_icon.png') }}" alt="signin"></a></li>
+                </div>
+            </ul>
+        </nav>
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <footer>
+            <p>2024 Company Sentiment Analyser</p>
+        </footer>
+    </div>
+</body>
+<script>
+    function getnotifs() {
+            fetch(`/notification`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Additional headers like CSRF tokens if needed
+                },
+                // Include credentials if your Flask app requires authentication
+                credentials: 'include'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.status)
+                if (data.status === "New") {
+                    let text1 = "Notification\nThere are new news articles involving the following companies:\n"
+                    let text2 = text1.concat(data.info)
+                    alert(text2)
+                }
+            })
+            .catch(error => console.error('Error retrieving notifications:', error));
+        }
+
+    setInterval(getnotifs, 10000);
+</script>
+</html>

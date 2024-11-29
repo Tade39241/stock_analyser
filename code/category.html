@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %} Categories - {{catname}} - Company Sentiment Analyser {% endblock %}
+{% block content %}
+<main>
+    <div class="category-page-container">
+        <h2 style="color: white; font-family: Lobster; font-size: 40px;">{{ catname }}<br>
+        {% if logged_in %}
+        <button id="followCategoryBtn" onclick="toggleCategoryFollow()" style="float:center;">
+            {{ 'Follow' if not is_following else 'Unfollow' }}
+        </button>
+        {% endif %}    
+        </h2>
+        
+        <br>
+        <p>Ranked by Growth (last 7 days)</p>
+        {% for company in category_companies %}
+        <a href="/company_dashboard/{{ company.compticker }}">
+            <div class="categoryRow">
+                <div class="categoryColumn1">
+                    <p style="color: white;">{{company.rownum}}</p>
+                </div>
+                <div class="categoryColumn2">
+                    <p style="color: white;">{{company.compname}}</p>
+                </div>
+                <div class="categoryColumn3">
+                    <p style="color: white;">Stock price: £{{company.stockprice}}</p> <!--Current stock price-->
+                    <p  class="{{ 'growth-positive' if company.growth >= 0 else 'growth-negative' }}">Growth (last 7 days): {{company.growth}}%</p>
+                    <p  class="{{ 'growth-positive' if company.comprating >= 0 else 'growth-negative' }}">Public Perception rating: {{company.comprating}}</p> <!--Sentiment number-->
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    <script>
+        function toggleCategoryFollow() {
+            const categ = '{{ catname }}';
+            fetch(`/toggle_follow_category/${categ}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Additional headers like CSRF tokens if needed
+                },
+                // Include credentials if your Flask app requires authentication
+                credentials: 'include'
+            })
+    
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => {
+                const followCategoryBtn = document.getElementById('followCategoryBtn');
+                if (data.status === 'followed') {
+                    followCategoryBtn.textContent = 'Unfollow';
+                } else if (data.status === 'unfollowed') {
+                    followCategoryBtn.textContent = 'Follow';
+                }
+            })
+            .catch(error => console.error('Error toggling follow status:', error));
+        }
+    </script>
+</main>
+{% endblock %}

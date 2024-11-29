@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ company_data.name }} Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* Additional styles if needed */
+    </style>
+</head>
+<body class="bg-gradient-to-b from-purple-500 to-green-500">
+    <!-- Navbar -->
+    <nav class="bg-purple-800 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="{{ company_data.logo_url }}" alt="Company logo" class="mr-3">
+                <div>{{ company_data.name }}</div>
+                <!-- Navigation Links -->
+                <div class="hidden lg:flex items-center space-x-4 ml-10">
+                    <a href="/" class="hover:text-gray-300">Home</a>
+                    <a href="/categories" class="hover:text-gray-300">Categories</a>
+                    <a href="/news" class="hover:text-gray-300">News</a>
+                    <a href="/about" class="hover:text-gray-300">About</a>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center bg-white text-gray-800 rounded-full p-2">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search" class="bg-transparent focus:outline-none">
+                </div>
+                <i class="far fa-user-circle text-3xl"></i>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Content -->
+    <div class="container mx-auto my-4 p-4 bg-white rounded-lg shadow-lg">
+        <div class="flex flex-col lg:flex-row justify-between">
+            <div class="flex items-center space-x-4">
+                <img src="{{ company_data.logo_url }}" alt="Company logo" class="mr-3">
+                <div class="text-lg font-bold">{{ company_data.info.get('longName', 'Company Name Not Available')}}</div>
+                <div class="text-sm">{{ daily_growth }}</div>
+            </div>
+            <div class="flex mt-4 lg:mt-0">
+                <!-- Tabs for Overview, Chart, Analysis, News, Statistics -->
+                <div class="flex space-x-4">
+                    <div class="bg-purple-700 text-white py-2 px-4 rounded">Overview</div>
+                    <div class="py-2 px-4 rounded hover:bg-purple-300 hover:text-white">Chart</div>
+                    <div class="py-2 px-4 rounded hover:bg-purple-300 hover:text-white">Analysis</div>
+                    <div class="py-2 px-4 rounded hover:bg-purple-300 hover:text-white">News</div>
+                    <div class="py-2 px-4 rounded hover:bg-purple-300 hover:text-white">Statistics</div>
+                </div>
+            </div>
+        </div>
+        <!-- Main content placeholder -->
+        <div class="mt-4">
+            <h2 class="text-2xl font-bold mb-2">Latest News</h2>
+            <div class="space-y-4">
+                {% for article in articles %}
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold">{{ article.title }}</h3>
+                        <p>{{ article.description }}</p>
+                        <a href="{{ article.url }}" class="text-blue-600 hover:underline">Read more</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
